@@ -196,66 +196,68 @@ public class Dungeon {
 		challenges = SPDSettings.challenges();
 		mobsToChampion = -1;
 
-		if (daily) {
-			seed = SPDSettings.lastDaily();
-			DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT, Locale.ROOT);
-			format.setTimeZone(TimeZone.getTimeZone("UTC"));
-			customSeedText = format.format(new Date(seed));
-		} else if (!SPDSettings.customSeed().isEmpty()){
-			customSeedText = SPDSettings.customSeed();
-			seed = DungeonSeed.convertFromText(customSeedText);
-		} else {
+		boolean foundSeed = false;
+
+		while (foundSeed == false) {
 			customSeedText = "";
 			seed = DungeonSeed.randomSeed();
+
+			Actor.clear();
+			Actor.resetNextID();
+
+			//offset seed slightly to avoid output patterns
+			Random.pushGenerator( seed+1 );
+
+				Scroll.initLabels();
+				Potion.initColors();
+				Ring.initGems();
+
+				SpecialRoom.initForRun();
+				SecretRoom.initForRun();
+
+				Generator.fullReset();
+
+			Random.resetGenerators();
+			
+			Statistics.reset();
+			Notes.reset();
+
+			quickslot.reset();
+			QuickSlotButton.reset();
+			Toolbar.swappedQuickslots = false;
+			
+			depth = 1;
+			branch = 0;
+
+			gold = 0;
+			energy = 0;
+
+			droppedItems = new SparseArray<>();
+			portedItems = new SparseArray<>();
+
+			LimitedDrops.reset();
+			
+			chapters = new HashSet<>();
+			
+			Ghost.Quest.reset();
+			Wandmaker.Quest.reset();
+			Blacksmith.Quest.reset();
+			Imp.Quest.reset();
+
+			hero = new Hero();
+			hero.live();
+			
+			Badges.reset();
+
+			for (int i = 1; i < 25; i++){
+				newLevel();
+			}
+
+			if (Imp.Quest.rewardRing.contains("wealth +4") && Wandmaker.Quest.questType == "rotberry") {
+				System.out.println(Long.toString(seed) + ": " + DungeonSeed.convertToCode(seed));
+				foundSeed = true;
+			}
 		}
-
-		Actor.clear();
-		Actor.resetNextID();
-
-		//offset seed slightly to avoid output patterns
-		Random.pushGenerator( seed+1 );
-
-			Scroll.initLabels();
-			Potion.initColors();
-			Ring.initGems();
-
-			SpecialRoom.initForRun();
-			SecretRoom.initForRun();
-
-			Generator.fullReset();
-
-		Random.resetGenerators();
-		
-		Statistics.reset();
-		Notes.reset();
-
-		quickslot.reset();
-		QuickSlotButton.reset();
-		Toolbar.swappedQuickslots = false;
-		
-		depth = 1;
-		branch = 0;
-
-		gold = 0;
-		energy = 0;
-
-		droppedItems = new SparseArray<>();
-		portedItems = new SparseArray<>();
-
-		LimitedDrops.reset();
-		
-		chapters = new HashSet<>();
-		
-		Ghost.Quest.reset();
-		Wandmaker.Quest.reset();
-		Blacksmith.Quest.reset();
-		Imp.Quest.reset();
-
-		hero = new Hero();
-		hero.live();
-		
-		Badges.reset();
-		
 		GamesInProgress.selectedClass.initHero( hero );
 	}
 
@@ -268,6 +270,7 @@ public class Dungeon {
 		Dungeon.level = null;
 		Actor.clear();
 
+		depth++;
 		if (depth > Statistics.deepestFloor) {
 			Statistics.deepestFloor = depth;
 			

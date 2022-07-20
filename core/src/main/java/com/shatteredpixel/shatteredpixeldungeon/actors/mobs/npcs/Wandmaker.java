@@ -212,6 +212,8 @@ public class Wandmaker extends NPC {
 		
 		public static Wand wand1;
 		public static Wand wand2;
+
+		public static String questType;
 		
 		public static void reset() {
 			spawned = false;
@@ -330,12 +332,15 @@ public class Wandmaker extends NPC {
 				switch (type){
 					case 1: default:
 						rooms.add(new MassGraveRoom());
+						questType = "";
 						break;
 					case 2:
 						rooms.add(new RitualSiteRoom());
+						questType = "";
 						break;
 					case 3:
 						rooms.add(new RotGardenRoom());
+						questType = "rotberry";
 						break;
 				}
 		

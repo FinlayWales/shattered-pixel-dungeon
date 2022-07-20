@@ -153,6 +153,7 @@ public class Imp extends NPC {
 		private static boolean completed;
 		
 		public static Ring reward;
+		public static String rewardRing;
 		
 		public static void reset() {
 			spawned = false;
@@ -236,6 +237,8 @@ public class Imp extends NPC {
 				} while (reward.cursed);
 				reward.upgrade( 2 );
 				reward.cursed = true;
+				reward.identify(false);
+				rewardRing = reward.name() + " +" + Integer.toString(reward.level());
 			}
 		}
 		
