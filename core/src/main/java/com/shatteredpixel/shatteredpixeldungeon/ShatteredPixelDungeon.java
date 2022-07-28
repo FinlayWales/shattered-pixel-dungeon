@@ -23,6 +23,8 @@ package com.shatteredpixel.shatteredpixeldungeon;
 
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfMetamorphosis;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.HeroSelectScene;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.TitleScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.WelcomeScene;
@@ -44,7 +46,8 @@ public class ShatteredPixelDungeon extends Game {
 	public static final int v1_3_0  = 642;
 	
 	public ShatteredPixelDungeon( PlatformSupport platform ) {
-		super( sceneClass == null ? WelcomeScene.class : sceneClass, platform );
+		super( InterlevelScene.class, platform );
+		InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
 
 		//pre-v1.3.0
 		com.watabou.utils.Bundle.addAlias(

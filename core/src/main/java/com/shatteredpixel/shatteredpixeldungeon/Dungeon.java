@@ -88,6 +88,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Dungeon {
 
@@ -253,12 +255,22 @@ public class Dungeon {
 				newLevel();
 			}
 
+			System.out.println(Imp.Quest.rewardRing + " " + Wandmaker.Quest.questType);
+
 			if (Imp.Quest.rewardRing.contains("wealth +4") && Wandmaker.Quest.questType == "rotberry") {
-				System.out.println(Long.toString(seed) + ": " + DungeonSeed.convertToCode(seed));
+				try {
+					FileWriter myWriter = new FileWriter("out.txt");
+					myWriter.write(DungeonSeed.convertToCode(seed));
+					myWriter.close();
+				} catch (IOException e) {
+					System.out.println("An error occurred.");
+					e.printStackTrace();
+				}
 				foundSeed = true;
 			}
 		}
-		GamesInProgress.selectedClass.initHero( hero );
+		System.exit(0);
+		//GamesInProgress.selectedClass.initHero( hero );
 	}
 
 	public static boolean isChallenged( int mask ) {
